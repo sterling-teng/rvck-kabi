@@ -1,0 +1,24 @@
+import re
+
+def process_kabi_file(input_path, output_path):
+    pattern = r'^0x[0-9a-fA-F]+\t(.*?)\t(vmlinux\s+EXPORT_SYMBOL(_GPL)?)?$'
+    
+    with open(input_path, 'r', encoding='utf-8') as f_in, open(output_path, 'w', encoding='utf-8') as f_out:
+        for line in f_in:
+            match = re.match(pattern, line.strip())
+            if match:
+                symbol = match.group(1)
+                f_out.write(symbol + '\n')
+
+if __name__ == "__main__":
+    print("请输入Linux内核KABI文件处理工具")
+    input_file = input("请输入输入文件路径（例如: kabi.txt）: ").strip()
+    output_file = input("请输入输出文件路径（例如: processed_kabi.txt）: ").strip()
+    
+    try:
+        process_kabi_file(input_file, output_file)
+        print(f"\n处理完成！\n输入文件: {input_file}\n输出文件: {output_file}")
+    except FileNotFoundError:
+        print(f"错误：输入文件 '{input_file}' 未找到，请检查路径是否正确")
+    except Exception as e:
+        print(f"处理过程中出现错误: {str(e)}")
