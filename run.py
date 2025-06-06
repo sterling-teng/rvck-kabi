@@ -1,0 +1,37 @@
+def compare_files(file_a, file_b, output_file):
+    try:
+        # 读取文件 a 的内容，将每行存储为集合中的一个元素
+        with open(file_a, 'r') as f_a:
+            lines_a = set(f_a.readlines())
+        # 读取文件 b 的内容，将每行存储为集合中的一个元素
+        with open(file_b, 'r') as f_b:
+            lines_b = set(f_b.readlines())
+
+        # 找出在 b 中但不在 a 中的行
+        diff_lines_b_not_a = [line for line in lines_b if line not in lines_a]
+        # 找出在 a 中但不在 b 中的行
+        diff_lines_a_not_b = [line for line in lines_a if line not in lines_b]
+
+        # 将差异行写入输出文件
+        with open(output_file, 'w') as f_diff:
+            f_diff.write("在文件 b 中但不在文件 a 中的行：\n")
+            for line in diff_lines_b_not_a:
+                f_diff.write(line)
+            f_diff.write("\n在文件 a 中但不在文件 b 中的行：\n")
+            for line in diff_lines_a_not_b:
+                f_diff.write(line)
+
+        print(f"文件比较完成，差异行已写入 {output_file}")
+    except FileNotFoundError:
+        print("错误：指定的文件未找到，请检查文件路径。")
+    except Exception as e:
+        print(f"发生未知错误：{e}")
+
+
+if __name__ == "__main__":
+    file_a = input("请输入第一个文件的名称或路径: ").strip()
+    file_b = input("请输入第二个文件的名称或路径: ").strip()
+    output_file = input("请输入输出文件的名称或路径: ").strip()
+
+    compare_files(file_a, file_b, output_file)
+
